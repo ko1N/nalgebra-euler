@@ -1,4 +1,5 @@
 use super::float::NormalizeAngle;
+use super::euler::Euler;
 use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
 
@@ -35,12 +36,12 @@ impl<N: Scalar + RealField> Magnitude2D<N> for Vector3<N> {
 }
 
 pub trait VectorAngles<N: Scalar> {
-    fn euler_angles(&self) -> (N, N, N);
-    fn euler_angles_with_up(&self, up: &Vector3<N>) -> (N, N, N);
+    fn euler_angles(&self) -> Euler<N>;
+    fn euler_angles_with_up(&self, up: &Vector3<N>) -> Euler<N>;
 }
 
 impl VectorAngles<f32> for Vector3<f32> {
-    fn euler_angles(&self) -> (f32, f32, f32) {
+    fn euler_angles(&self) -> Euler<f32> {
         if self.x == 0.0 && self.z == 0.0 {
             let pitch = {
                 if self.y > 0.0 {
@@ -49,7 +50,7 @@ impl VectorAngles<f32> for Vector3<f32> {
                     90.0
                 }
             };
-            (pitch.normalize_angle(), 0.0, 0.0)
+            Euler::new(pitch.normalize_angle(), 0.0, 0.0)
         } else {
             // magnitude_2d ?
             let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
@@ -62,11 +63,11 @@ impl VectorAngles<f32> for Vector3<f32> {
                 yaw += 360.0;
             }
 
-            (pitch.normalize_angle(), yaw.normalize_angle(), 0.0)
+            Euler::new(pitch.normalize_angle(), yaw.normalize_angle(), 0.0)
         }
     }
 
-    fn euler_angles_with_up(&self, up: &Vector3<f32>) -> (f32, f32, f32) {
+    fn euler_angles_with_up(&self, up: &Vector3<f32>) -> Euler<f32> {
         let left = up.cross(self);
         left.normalize();
 
@@ -75,13 +76,13 @@ impl VectorAngles<f32> for Vector3<f32> {
 
         if distxz > 0.001 {
             let up_y = (self.x * left.z) - (self.z * left.x);
-            (
+            Euler::new(
                 pitch.normalize_angle(),
                 self.z.atan2(self.x).to_degrees().normalize_angle(),
                 left.y.atan2(up_y).to_degrees().normalize_angle(),
             )
         } else {
-            (
+            Euler::new(
                 pitch.normalize_angle(),
                 (-left.x).atan2(left.z).to_degrees().normalize_angle(),
                 0.0,
@@ -113,10 +114,10 @@ mod tests {
     #[test]
     fn test_vector_angles() {
         let a = Vector3::new(0.0, 5.0, 5.0);
-        assert_eq!(a.euler_angles(), (-45.0, 90.0, 0.0));
+        assert_eq!(a.euler_angles(), Euler::new(-45.0, 90.0, 0.0));
         let b = Vector3::new(0.0, 10.0, 10.0);
-        assert_eq!(b.euler_angles(), (-45.0, 90.0, 0.0));
+        assert_eq!(b.euler_angles(), Euler::new(-45.0, 90.0, 0.0));
         let c = Vector3::new(1.0, 1.0, 0.0);
-        assert_eq!(c.euler_angles(), (-45.0, 0.0, 0.0));
+        assert_eq!(c.euler_angles(), Euler::new(-45.0, 0.0, 0.0));
     }
 }

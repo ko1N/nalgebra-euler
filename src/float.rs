@@ -19,19 +19,6 @@ impl NormalizeAngle for f32 {
     }
 }
 
-pub trait SinCos
-where
-    Self: Sized,
-{
-    fn sin_cos(self) -> (Self, Self);
-}
-
-impl SinCos for f32 {
-    fn sin_cos(self) -> (Self, Self) {
-        (self.sin(), self.cos())
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
