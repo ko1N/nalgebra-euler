@@ -154,6 +154,7 @@ if (up) {
 }
 */
 
-        Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
+        // return {cp * cy, cp * sy, -sp};
+        Vector3::new(p.1 * y.1, -p.0, p.1 * y.0)
     }
 }
