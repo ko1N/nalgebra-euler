@@ -135,9 +135,9 @@ pub trait AngleVectors<N: Scalar> {
 
 impl AngleVectors<f32> for (f32, f32, f32) {
     fn forward(&self) -> Vector3<f32> {
-        let p = self.0.sin_cos();
-        let y = self.1.sin_cos();
-        let r = self.2.sin_cos();
+        let p = self.0.to_radians().sin_cos();
+        let y = self.1.to_radians().sin_cos();
+        let r = self.2.to_radians().sin_cos();
 
         // right / up ?
 /*
