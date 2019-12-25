@@ -23,11 +23,7 @@ pub struct Euler<N: Scalar> {
 
 impl<N: Scalar> Euler<N> {
     pub fn new(p: N, y: N, r: N) -> Self {
-        Self{
-            p,
-            y,
-            r
-        }
+        Self { p, y, r }
     }
 }
 
@@ -74,7 +70,6 @@ impl Euler<f32> {
         }
     }
 }
-
 
 /*
     inline void

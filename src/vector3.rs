@@ -1,5 +1,5 @@
-use super::float::NormalizeAngle;
 use super::euler::Euler;
+use super::float::NormalizeAngle;
 use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
 
