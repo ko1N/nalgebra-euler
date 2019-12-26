@@ -1,16 +1,11 @@
+use super::float::NormalizeAngle;
 use super::vector3::VectorAngles;
+use super::IsFinite;
 use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
 
-// TODO: Euler or Angle Type
-// pub type Vector3<N> = VectorN<N, U3>;
-
 pub trait AngleVectors<N: Scalar> {
     fn forward(&self) -> Vector3<N>;
-}
-
-pub trait IsFinite {
-    fn is_finite(&self) -> bool;
 }
 
 // TODO: implement from and to traits
@@ -27,16 +22,47 @@ impl<N: Scalar> Euler<N> {
     }
 }
 
-// TODO: add IsFinite trait for Euler and Vector3
 impl<N: Scalar + RealField> IsFinite for Euler<N> {
     fn is_finite(&self) -> bool {
         self.p.is_finite() && self.y.is_finite() && self.r.is_finite()
     }
 }
 
+impl Euler<f32> {
+    pub fn normalize(&self) -> Self {
+        Euler::new(
+            self.p.normalize_angle(),
+            self.y.normalize_angle(),
+            self.r.normalize_angle(),
+        )
+    }
+}
+
+impl Euler<f64> {
+    pub fn normalize(&self) -> Self {
+        Euler::new(
+            self.p.normalize_angle(),
+            self.y.normalize_angle(),
+            self.r.normalize_angle(),
+        )
+    }
+}
+
 // TODO: create to_radians and sin_cos impl on N ?
 impl AngleVectors<f32> for Euler<f32> {
     fn forward(&self) -> Vector3<f32> {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        //let r = self.r.to_radians().sin_cos();
+
+        // TODO: right / up ?
+
+        Vector3::new(p.1 * y.1, -p.0, p.1 * y.0)
+    }
+}
+
+impl AngleVectors<f64> for Euler<f64> {
+    fn forward(&self) -> Vector3<f64> {
         let p = self.p.to_radians().sin_cos();
         let y = self.y.to_radians().sin_cos();
         //let r = self.r.to_radians().sin_cos();
@@ -61,7 +87,31 @@ impl Euler<f32> {
             self.clone()
         } else {
             let t = v1 + delta;
-            let out = t.euler_angles(); /* TODO: normalize */
+            let out = t.euler_angles().normalize();
+            if !out.is_finite() {
+                self.clone()
+            } else {
+                out
+            }
+        }
+    }
+}
+
+impl Euler<f64> {
+    pub fn lerp(&self, other: &Euler<f64>, amount: f64) -> Euler<f64> {
+        let v1 = self.forward();
+        let v2 = other.forward();
+
+        let mut delta = v2 - v1;
+        let mag = delta.magnitude();
+        delta /= amount;
+        let new_mag = delta.magnitude();
+
+        if new_mag < std::f64::EPSILON || new_mag > mag {
+            self.clone()
+        } else {
+            let t = v1 + delta;
+            let out = t.euler_angles().normalize();
             if !out.is_finite() {
                 self.clone()
             } else {
@@ -122,29 +172,3 @@ impl Euler<f32> {
 */
 
 // https://github.com/divideconcept/FastTrigo
-
-/*
-vector3
-euler::to_vectors(vector3 *right, vector3 *up) const {
-    float sr, sp, sy, cr, cp, cy;
-
-    math::sincos(math::deg_to_rad(this->y), sy, cy);
-    math::sincos(math::deg_to_rad(this->x), sp, cp);
-    math::sincos(math::deg_to_rad(this->z), sr, cr);
-
-    if (right) {
-        right->x = -1.0f * sr * sp * cy + -1.0f * cr * -sy;
-        right->y = -1.0f * sr * sp * sy + -1.0f * cr * cy;
-        right->z = -1.0f * sr * cp;
-    }
-
-    if (up) {
-        up->x = cr * sp * cy + -sr * -sy;
-        up->y = cr * sp * sy + -sr * cy;
-        up->z = cr * cp;
-    }
-
-    // forward vector
-    return {cp * cy, cp * sy, -sp};
-}
-*/
