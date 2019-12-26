@@ -48,9 +48,6 @@ linux-native:
     - rustc --version
     - cargo --version
     - cargo build --release
-  artifacts:
-    paths:
-      - target/release/flow-cli
 
 linux-musl:
   stage: build_cross
@@ -61,9 +58,6 @@ linux-musl:
     - rustc --version
     - cargo --version
     - cargo build --release --target x86_64-unknown-linux-musl
-  artifacts:
-    paths:
-      - target/x86_64-unknown-linux-musl/release/flow-cli
 
 linux-gnu-armv6:
   stage: build_cross
@@ -80,9 +74,6 @@ linux-gnu-armv6:
     - rustc --version
     - cargo --version
     - cargo build --release --target arm-unknown-linux-gnueabi
-  artifacts:
-    paths:
-      - target/arm-unknown-linux-gnueabi/release/flow-cli
 
 linux-gnu-armv6hf:
   stage: build_cross
@@ -99,9 +90,6 @@ linux-gnu-armv6hf:
     - rustc --version
     - cargo --version
     - cargo build --release --target arm-unknown-linux-gnueabihf
-  artifacts:
-    paths:
-      - target/arm-unknown-linux-gnueabihf/release/flow-cli
 
 linux-gnu-armv7hf:
   stage: build_cross
@@ -118,9 +106,6 @@ linux-gnu-armv7hf:
     - rustc --version
     - cargo --version
     - cargo build --release --target armv7-unknown-linux-gnueabihf
-  artifacts:
-    paths:
-      - target/armv7-unknown-linux-gnueabihf/release/flow-cli
 
 windows-mingw-x64:
   stage: build_cross
@@ -137,6 +122,3 @@ windows-mingw-x64:
     - rustc --version
     - cargo --version
     - cargo build --release --target x86_64-pc-windows-gnu
-  artifacts:
-    paths:
-      - target/x86_64-pc-windows-gnu/release/flow-cli.exe
