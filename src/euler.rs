@@ -85,12 +85,12 @@ impl Euler<f32> {
 
         if new_mag < std::f32::EPSILON || new_mag > mag {
             // prevent overshoot
-            self.clone()
+            other.clone()
         } else {
             let t = v1 + delta;
             let out = t.euler_angles().normalize();
             if !out.is_finite() {
-                self.clone()
+                other.clone()
             } else {
                 out
             }
@@ -110,12 +110,12 @@ impl Euler<f64> {
 
         if new_mag < std::f64::EPSILON || new_mag > mag {
             // prevent overshoot
-            self.clone()
+            other.clone()
         } else {
             let t = v1 + delta;
             let out = t.euler_angles().normalize();
             if !out.is_finite() {
-                self.clone()
+                other.clone()
             } else {
                 out
             }
