@@ -57,7 +57,7 @@ impl VectorAngles<f32> for Vector3<f32> {
                     90f32
                 }
             };
-            Euler::new(pitch.normalize_angle(), 0f32, 0f32)
+            Euler::new(pitch, 0f32, 0f32).normalize()
         } else {
             // magnitude_2d ?
             let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
@@ -70,7 +70,7 @@ impl VectorAngles<f32> for Vector3<f32> {
                 yaw += 360f32;
             }
 
-            Euler::new(pitch.normalize_angle(), yaw.normalize_angle(), 0f32)
+            Euler::new(pitch, yaw, 0f32).normalize()
         }
     }
 
@@ -84,16 +84,16 @@ impl VectorAngles<f32> for Vector3<f32> {
         if distxz > 0.001f32 {
             let up_y = (self.x * left.z) - (self.z * left.x);
             Euler::new(
-                pitch.normalize_angle(),
-                self.z.atan2(self.x).to_degrees().normalize_angle(),
-                left.y.atan2(up_y).to_degrees().normalize_angle(),
-            )
+                pitch,
+                self.z.atan2(self.x).to_degrees(),
+                left.y.atan2(up_y).to_degrees(),
+            ).normalize()
         } else {
             Euler::new(
-                pitch.normalize_angle(),
-                (-left.x).atan2(left.z).to_degrees().normalize_angle(),
+                pitch,
+                (-left.x).atan2(left.z).to_degrees(),
                 0f32,
-            )
+            ).normalize()
         }
     }
 }
@@ -108,7 +108,7 @@ impl VectorAngles<f64> for Vector3<f64> {
                     90f64
                 }
             };
-            Euler::new(pitch.normalize_angle(), 0f64, 0f64)
+            Euler::new(pitch, 0f64, 0f64).normalize()
         } else {
             // magnitude_2d ?
             let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
@@ -121,7 +121,7 @@ impl VectorAngles<f64> for Vector3<f64> {
                 yaw += 360f64;
             }
 
-            Euler::new(pitch.normalize_angle(), yaw.normalize_angle(), 0f64)
+            Euler::new(pitch, yaw, 0f64).normalize()
         }
     }
 
@@ -135,16 +135,16 @@ impl VectorAngles<f64> for Vector3<f64> {
         if distxz > 0.001f64 {
             let up_y = (self.x * left.z) - (self.z * left.x);
             Euler::new(
-                pitch.normalize_angle(),
-                self.z.atan2(self.x).to_degrees().normalize_angle(),
-                left.y.atan2(up_y).to_degrees().normalize_angle(),
-            )
+                pitch,
+                self.z.atan2(self.x).to_degrees(),
+                left.y.atan2(up_y).to_degrees(),
+            ).normalize()
         } else {
             Euler::new(
-                pitch.normalize_angle(),
-                (-left.x).atan2(left.z).to_degrees().normalize_angle(),
+                pitch,
+                (-left.x).atan2(left.z).to_degrees(),
                 0f64,
-            )
+            ).normalize()
         }
     }
 }

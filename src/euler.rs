@@ -57,7 +57,7 @@ impl AngleVectors<f32> for Euler<f32> {
 
         // TODO: right / up ?
 
-        Vector3::new(p.1 * y.1, -p.0, p.1 * y.0)
+        Vector3::new(p.1 * y.1, -p.0, p.1 * y.0).normalize()
     }
 }
 
@@ -69,14 +69,14 @@ impl AngleVectors<f64> for Euler<f64> {
 
         // TODO: right / up ?
 
-        Vector3::new(p.1 * y.1, -p.0, p.1 * y.0)
+        Vector3::new(p.1 * y.1, -p.0, p.1 * y.0).normalize()
     }
 }
 
 impl Euler<f32> {
     pub fn lerp(&self, other: &Euler<f32>, amount: f32) -> Euler<f32> {
-        let v1 = self.forward();
-        let v2 = other.forward();
+        let v1 = self.forward().normalize();
+        let v2 = other.forward().normalize();
 
         let mut delta = v2 - v1;
         let mag = delta.magnitude();
@@ -84,6 +84,7 @@ impl Euler<f32> {
         let new_mag = delta.magnitude();
 
         if new_mag < std::f32::EPSILON || new_mag > mag {
+            // prevent overshoot
             self.clone()
         } else {
             let t = v1 + delta;
@@ -99,8 +100,8 @@ impl Euler<f32> {
 
 impl Euler<f64> {
     pub fn lerp(&self, other: &Euler<f64>, amount: f64) -> Euler<f64> {
-        let v1 = self.forward();
-        let v2 = other.forward();
+        let v1 = self.forward().normalize();
+        let v2 = other.forward().normalize();
 
         let mut delta = v2 - v1;
         let mag = delta.magnitude();
@@ -108,6 +109,7 @@ impl Euler<f64> {
         let new_mag = delta.magnitude();
 
         if new_mag < std::f64::EPSILON || new_mag > mag {
+            // prevent overshoot
             self.clone()
         } else {
             let t = v1 + delta;
