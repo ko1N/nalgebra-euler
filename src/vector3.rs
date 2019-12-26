@@ -87,13 +87,10 @@ impl VectorAngles<f32> for Vector3<f32> {
                 pitch,
                 self.z.atan2(self.x).to_degrees(),
                 left.y.atan2(up_y).to_degrees(),
-            ).normalize()
+            )
+            .normalize()
         } else {
-            Euler::new(
-                pitch,
-                (-left.x).atan2(left.z).to_degrees(),
-                0f32,
-            ).normalize()
+            Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0f32).normalize()
         }
     }
 }
@@ -138,13 +135,10 @@ impl VectorAngles<f64> for Vector3<f64> {
                 pitch,
                 self.z.atan2(self.x).to_degrees(),
                 left.y.atan2(up_y).to_degrees(),
-            ).normalize()
+            )
+            .normalize()
         } else {
-            Euler::new(
-                pitch,
-                (-left.x).atan2(left.z).to_degrees(),
-                0f64,
-            ).normalize()
+            Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0f64).normalize()
         }
     }
 }
