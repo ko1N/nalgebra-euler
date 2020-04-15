@@ -123,6 +123,155 @@ impl Euler<f64> {
     }
 }
 
+// TODO: use ClosedAdd
+// add
+impl<N: Scalar + RealField> std::ops::Add for Euler<N> {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Euler::new(self.p + other.p, self.y + other.y, self.r + other.r)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::Add<N> for Euler<N> {
+    type Output = Self;
+
+    fn add(self, other: N) -> Self {
+        Euler::new(self.p + other, self.y + other, self.r + other)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::AddAssign for Euler<N> {
+    fn add_assign(&mut self, other: Self) {
+        *self = Self {
+            p: self.p + other.p,
+            y: self.y + other.y,
+            r: self.r + other.r,
+        };
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::AddAssign<N> for Euler<N> {
+    fn add_assign(&mut self, other: N) {
+        *self = Self {
+            p: self.p + other,
+            y: self.y + other,
+            r: self.r + other,
+        };
+    }
+}
+
+// mul
+impl<N: Scalar + RealField> std::ops::Mul for Euler<N> {
+    type Output = Self;
+
+    fn mul(self, other: Self) -> Self {
+        Euler::new(self.p * other.p, self.y * other.y, self.r * other.r)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::Mul<N> for Euler<N> {
+    type Output = Self;
+
+    fn mul(self, other: N) -> Self {
+        Euler::new(self.p * other, self.y * other, self.r * other)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::MulAssign for Euler<N> {
+    fn mul_assign(&mut self, other: Self) {
+        *self = Self {
+            p: self.p * other.p,
+            y: self.y * other.y,
+            r: self.r * other.r,
+        };
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::MulAssign<N> for Euler<N> {
+    fn mul_assign(&mut self, other: N) {
+        *self = Self {
+            p: self.p * other,
+            y: self.y * other,
+            r: self.r * other,
+        };
+    }
+}
+
+// sub
+impl<N: Scalar + RealField> std::ops::Sub for Euler<N> {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        Euler::new(self.p - other.p, self.y - other.y, self.r - other.r)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::Sub<N> for Euler<N> {
+    type Output = Self;
+
+    fn sub(self, other: N) -> Self {
+        Euler::new(self.p - other, self.y - other, self.r - other)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::SubAssign for Euler<N> {
+    fn sub_assign(&mut self, other: Self) {
+        *self = Self {
+            p: self.p - other.p,
+            y: self.y - other.y,
+            r: self.r - other.r,
+        };
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::SubAssign<N> for Euler<N> {
+    fn sub_assign(&mut self, other: N) {
+        *self = Self {
+            p: self.p - other,
+            y: self.y - other,
+            r: self.r - other,
+        };
+    }
+}
+
+// div
+impl<N: Scalar + RealField> std::ops::Div for Euler<N> {
+    type Output = Self;
+
+    fn div(self, other: Self) -> Self {
+        Euler::new(self.p / other.p, self.y / other.y, self.r / other.r)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::Div<N> for Euler<N> {
+    type Output = Self;
+
+    fn div(self, other: N) -> Self {
+        Euler::new(self.p / other, self.y / other, self.r / other)
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::DivAssign for Euler<N> {
+    fn div_assign(&mut self, other: Self) {
+        *self = Self {
+            p: self.p / other.p,
+            y: self.y / other.y,
+            r: self.r / other.r,
+        };
+    }
+}
+
+impl<N: Scalar + RealField> std::ops::DivAssign<N> for Euler<N> {
+    fn div_assign(&mut self, other: N) {
+        *self = Self {
+            p: self.p / other,
+            y: self.y / other,
+            r: self.r / other,
+        };
+    }
+}
+
 /*
     inline void
     normalize(void) {
