@@ -7,7 +7,7 @@ pub trait SwapYZ {
     fn swap_yz(&self) -> Self;
 }
 
-impl<N: Scalar> SwapYZ for Vector3<N> {
+impl<N: Scalar + Copy> SwapYZ for Vector3<N> {
     fn swap_yz(&self) -> Self {
         Vector3::new(self.x, self.z, self.y)
     }
