@@ -1,3 +1,31 @@
+pub trait ClampAngle {
+    fn clamp_angle(self, min: Self, max: Self) -> Self;
+}
+
+impl ClampAngle for f32 {
+    fn clamp_angle(self, min: Self, max: Self) -> Self {
+        if self < min {
+            min
+        } else if self > max {
+            max
+        } else {
+            self
+        }
+    }
+}
+
+impl ClampAngle for f64 {
+    fn clamp_angle(self, min: Self, max: Self) -> Self {
+        if self < min {
+            min
+        } else if self > max {
+            max
+        } else {
+            self
+        }
+    }
+}
+
 pub trait NormalizeAngle {
     fn normalize_angle(self) -> Self;
 }

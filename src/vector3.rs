@@ -1,5 +1,8 @@
 use super::euler::Euler;
 use super::IsFinite;
+
+use std::ops::Mul;
+
 use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
 

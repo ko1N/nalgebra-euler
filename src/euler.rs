@@ -1,5 +1,5 @@
 use super::float::NormalizeAngle;
-use super::vector3::{VectorAngles, SwapYZ};
+use super::vector3::{SwapYZ, VectorAngles};
 use super::IsFinite;
 use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
@@ -57,7 +57,9 @@ impl AngleVectors<f32> for Euler<f32> {
 
         // TODO: right / up ?
 
-        Vector3::new(p.1 * y.1, p.1 * y.0, -p.0).swap_yz().normalize()
+        Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
+            .swap_yz()
+            .normalize()
     }
 }
 
@@ -69,7 +71,9 @@ impl AngleVectors<f64> for Euler<f64> {
 
         // TODO: right / up ?
 
-        Vector3::new(p.1 * y.1, p.1 * y.0, -p.0).swap_yz().normalize()
+        Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
+            .swap_yz()
+            .normalize()
     }
 }
 
