@@ -1,8 +1,6 @@
 use super::euler::Euler;
 use super::IsFinite;
 
-use std::ops::Mul;
-
 use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
 
@@ -77,8 +75,7 @@ impl VectorAngles<f32> for Vector3<f32> {
     }
 
     fn euler_angles_with_up(&self, up: &Vector3<f32>) -> Euler<f32> {
-        let left = up.cross(self);
-        left.normalize();
+        let left = up.cross(self).normalize();
 
         let distxz = self.magnitude_xz();
         let pitch = (-self.y).atan2(distxz).to_degrees();
@@ -125,8 +122,7 @@ impl VectorAngles<f64> for Vector3<f64> {
     }
 
     fn euler_angles_with_up(&self, up: &Vector3<f64>) -> Euler<f64> {
-        let left = up.cross(self);
-        left.normalize();
+        let left = up.cross(self).normalize();
 
         let distxz = self.magnitude_xz();
         let pitch = (-self.y).atan2(distxz).to_degrees();
