@@ -5,7 +5,17 @@ use alga::general::RealField;
 use nalgebra::{Scalar, Vector3};
 
 pub trait AngleVectors<N: Scalar> {
+    /// Returns the forward vector for this angle
     fn forward(&self) -> Vector3<N>;
+
+    /// Returns the right vector for this angle
+    fn right(&self) -> Vector3<N>;
+
+    /// Returns the up vector for this angle
+    fn up(&self) -> Vector3<N>;
+
+    /// Returns forward, right and up vector (in this order) for this angle
+    fn vectors(&self) -> (Vector3<N>, Vector3<N>, Vector3<N>);
 }
 
 // TODO: implement from and to traits
@@ -53,13 +63,66 @@ impl AngleVectors<f32> for Euler<f32> {
     fn forward(&self) -> Vector3<f32> {
         let p = self.p.to_radians().sin_cos();
         let y = self.y.to_radians().sin_cos();
-        //let r = self.r.to_radians().sin_cos();
-
-        // TODO: right / up ?
 
         Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
             .swap_yz()
             .normalize()
+    }
+
+    fn right(&self) -> Vector3<f32> {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        let r = self.r.to_radians().sin_cos();
+
+        Vector3::new(
+            -1f32 * r.0 * p.0 * y.1 + -1f32 * r.1 * -y.0,
+            -1f32 * r.0 * p.0 * y.0 + -1f32 * r.1 * y.1,
+            -1f32 * r.0 * p.1,
+        )
+        .swap_yz()
+        .normalize()
+    }
+
+    fn up(&self) -> Vector3<f32> {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        let r = self.r.to_radians().sin_cos();
+
+        Vector3::new(
+            r.1 * p.0 * y.1 + -r.0 * -y.0,
+            r.1 * p.0 * y.0 + -r.0 * y.1,
+            r.1 * p.1,
+        )
+        .swap_yz()
+        .normalize()
+    }
+
+    fn vectors(&self) -> (Vector3<f32>, Vector3<f32>, Vector3<f32>) {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        let r = self.r.to_radians().sin_cos();
+
+        let forward = Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
+            .swap_yz()
+            .normalize();
+
+        let right = Vector3::new(
+            -1f32 * r.0 * p.0 * y.1 + -1f32 * r.1 * -y.0,
+            -1f32 * r.0 * p.0 * y.0 + -1f32 * r.1 * y.1,
+            -1f32 * r.0 * p.1,
+        )
+        .swap_yz()
+        .normalize();
+
+        let up = Vector3::new(
+            r.1 * p.0 * y.1 + -r.0 * -y.0,
+            r.1 * p.0 * y.0 + -r.0 * y.1,
+            r.1 * p.1,
+        )
+        .swap_yz()
+        .normalize();
+
+        (forward, right, up)
     }
 }
 
@@ -67,13 +130,66 @@ impl AngleVectors<f64> for Euler<f64> {
     fn forward(&self) -> Vector3<f64> {
         let p = self.p.to_radians().sin_cos();
         let y = self.y.to_radians().sin_cos();
-        //let r = self.r.to_radians().sin_cos();
-
-        // TODO: right / up ?
 
         Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
             .swap_yz()
             .normalize()
+    }
+
+    fn right(&self) -> Vector3<f64> {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        let r = self.r.to_radians().sin_cos();
+
+        Vector3::new(
+            -1f64 * r.0 * p.0 * y.1 + -1f64 * r.1 * -y.0,
+            -1f64 * r.0 * p.0 * y.0 + -1f64 * r.1 * y.1,
+            -1f64 * r.0 * p.1,
+        )
+        .swap_yz()
+        .normalize()
+    }
+
+    fn up(&self) -> Vector3<f64> {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        let r = self.r.to_radians().sin_cos();
+
+        Vector3::new(
+            r.1 * p.0 * y.1 + -r.0 * -y.0,
+            r.1 * p.0 * y.0 + -r.0 * y.1,
+            r.1 * p.1,
+        )
+        .swap_yz()
+        .normalize()
+    }
+
+    fn vectors(&self) -> (Vector3<f64>, Vector3<f64>, Vector3<f64>) {
+        let p = self.p.to_radians().sin_cos();
+        let y = self.y.to_radians().sin_cos();
+        let r = self.r.to_radians().sin_cos();
+
+        let forward = Vector3::new(p.1 * y.1, p.1 * y.0, -p.0)
+            .swap_yz()
+            .normalize();
+
+        let right = Vector3::new(
+            -1f64 * r.0 * p.0 * y.1 + -1f64 * r.1 * -y.0,
+            -1f64 * r.0 * p.0 * y.0 + -1f64 * r.1 * y.1,
+            -1f64 * r.0 * p.1,
+        )
+        .swap_yz()
+        .normalize();
+
+        let up = Vector3::new(
+            r.1 * p.0 * y.1 + -r.0 * -y.0,
+            r.1 * p.0 * y.0 + -r.0 * y.1,
+            r.1 * p.1,
+        )
+        .swap_yz()
+        .normalize();
+
+        (forward, right, up)
     }
 }
 
