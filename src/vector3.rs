@@ -9,12 +9,14 @@ pub trait SwapYZ {
 }
 
 impl<N: Scalar + Copy> SwapYZ for Vector3<N> {
+    #[inline]
     fn swap_yz(&self) -> Self {
         Vector3::new(self.x, self.z, self.y)
     }
 }
 
 impl<N: Scalar + RealField> IsFinite for Vector3<N> {
+    #[inline]
     fn is_finite(&self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
     }
@@ -23,20 +25,24 @@ impl<N: Scalar + RealField> IsFinite for Vector3<N> {
 pub trait Magnitude2D<N: Scalar + RealField> {
     fn norm_xz_squared(&self) -> N::RealField;
 
+    #[inline]
     fn norm_xz(&self) -> N::RealField {
         self.norm_xz_squared().sqrt()
     }
 
+    #[inline]
     fn magnitude_xz_squared(&self) -> N::RealField {
         self.norm_xz_squared()
     }
 
+    #[inline]
     fn magnitude_xz(&self) -> N::RealField {
         self.norm_xz()
     }
 }
 
 impl<N: Scalar + RealField> Magnitude2D<N> for Vector3<N> {
+    #[inline]
     fn norm_xz_squared(&self) -> N::RealField {
         (self.x * self.x) + (self.z * self.z)
     }
@@ -47,99 +53,60 @@ pub trait VectorAngles<N: Scalar> {
     fn euler_angles_with_up(&self, up: &Vector3<N>) -> Euler<N>;
 }
 
-impl VectorAngles<f32> for Vector3<f32> {
-    fn euler_angles(&self) -> Euler<f32> {
-        if self.x == 0f32 && self.z == 0f32 {
-            let pitch = {
-                if self.y > 0f32 {
-                    270f32
+#[macro_export]
+macro_rules! impl_vector_angles {
+    ($typ:tt) => {
+        impl VectorAngles<$typ> for Vector3<$typ> {
+            fn euler_angles(&self) -> Euler<$typ> {
+                if self.x == 0.0 && self.z == 0.0 {
+                    let pitch: $typ = {
+                        if self.y > 0.0 {
+                            270.0
+                        } else {
+                            90.0
+                        }
+                    };
+                    Euler::new(pitch, 0.0, 0.0).normalized()
                 } else {
-                    90f32
+                    // magnitude_2d ?
+                    let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
+                    if pitch < 0.0 {
+                        pitch += 360.0;
+                    }
+
+                    let mut yaw = self.z.atan2(self.x).to_degrees();
+                    if yaw < 0.0 {
+                        yaw += 360.0;
+                    }
+
+                    Euler::new(pitch, yaw, 0.0).normalized()
                 }
-            };
-            Euler::new(pitch, 0f32, 0f32).normalize()
-        } else {
-            // magnitude_2d ?
-            let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
-            if pitch < 0f32 {
-                pitch += 360f32;
             }
 
-            let mut yaw = self.z.atan2(self.x).to_degrees();
-            if yaw < 0f32 {
-                yaw += 360f32;
+            fn euler_angles_with_up(&self, up: &Vector3<$typ>) -> Euler<$typ> {
+                let left = up.cross(self).normalize();
+
+                let distxz = self.magnitude_xz();
+                let pitch = (-self.y).atan2(distxz).to_degrees();
+
+                if distxz > 0.001 {
+                    let up_y = (self.x * left.z) - (self.z * left.x);
+                    Euler::new(
+                        pitch,
+                        self.z.atan2(self.x).to_degrees(),
+                        left.y.atan2(up_y).to_degrees(),
+                    )
+                    .normalized()
+                } else {
+                    Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0.0).normalized()
+                }
             }
-
-            Euler::new(pitch, yaw, 0f32).normalize()
         }
-    }
-
-    fn euler_angles_with_up(&self, up: &Vector3<f32>) -> Euler<f32> {
-        let left = up.cross(self).normalize();
-
-        let distxz = self.magnitude_xz();
-        let pitch = (-self.y).atan2(distxz).to_degrees();
-
-        if distxz > 0.001f32 {
-            let up_y = (self.x * left.z) - (self.z * left.x);
-            Euler::new(
-                pitch,
-                self.z.atan2(self.x).to_degrees(),
-                left.y.atan2(up_y).to_degrees(),
-            )
-            .normalize()
-        } else {
-            Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0f32).normalize()
-        }
-    }
+    };
 }
 
-impl VectorAngles<f64> for Vector3<f64> {
-    fn euler_angles(&self) -> Euler<f64> {
-        if self.x == 0f64 && self.z == 0f64 {
-            let pitch = {
-                if self.y > 0f64 {
-                    270f64
-                } else {
-                    90f64
-                }
-            };
-            Euler::new(pitch, 0f64, 0f64).normalize()
-        } else {
-            // magnitude_2d ?
-            let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
-            if pitch < 0f64 {
-                pitch += 360f64;
-            }
-
-            let mut yaw = self.z.atan2(self.x).to_degrees();
-            if yaw < 0f64 {
-                yaw += 360f64;
-            }
-
-            Euler::new(pitch, yaw, 0f64).normalize()
-        }
-    }
-
-    fn euler_angles_with_up(&self, up: &Vector3<f64>) -> Euler<f64> {
-        let left = up.cross(self).normalize();
-
-        let distxz = self.magnitude_xz();
-        let pitch = (-self.y).atan2(distxz).to_degrees();
-
-        if distxz > 0.001f64 {
-            let up_y = (self.x * left.z) - (self.z * left.x);
-            Euler::new(
-                pitch,
-                self.z.atan2(self.x).to_degrees(),
-                left.y.atan2(up_y).to_degrees(),
-            )
-            .normalize()
-        } else {
-            Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0f64).normalize()
-        }
-    }
-}
+impl_vector_angles!(f32);
+impl_vector_angles!(f64);
 
 #[cfg(test)]
 mod tests {

@@ -5,8 +5,8 @@ authors = ["ko1N <ko1N1337@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-nalgebra = "0.21.0"
-alga = "0.9.2"
+nalgebra = "0.31"
+alga = "0.9"
 
 [dev-dependencies]
-assert_approx_eq = "1.1.0"
+assert_approx_eq = "1.1"

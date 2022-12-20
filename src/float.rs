@@ -1,31 +1,3 @@
-pub trait ClampAngle {
-    fn clamp_angle(self, min: Self, max: Self) -> Self;
-}
-
-impl ClampAngle for f32 {
-    fn clamp_angle(self, min: Self, max: Self) -> Self {
-        if self < min {
-            min
-        } else if self > max {
-            max
-        } else {
-            self
-        }
-    }
-}
-
-impl ClampAngle for f64 {
-    fn clamp_angle(self, min: Self, max: Self) -> Self {
-        if self < min {
-            min
-        } else if self > max {
-            max
-        } else {
-            self
-        }
-    }
-}
-
 pub trait NormalizeAngle {
     fn normalize_angle(self) -> Self;
 }
@@ -34,7 +6,7 @@ impl NormalizeAngle for f32 {
     fn normalize_angle(self) -> Self {
         if !self.is_finite() {
             0f32
-        } else if self >= -180f32 && self <= 180f32 {
+        } else if (-180f32..=180f32).contains(&self) {
             self
         } else {
             let rots = (self / 360f32).abs().round();
@@ -51,7 +23,7 @@ impl NormalizeAngle for f64 {
     fn normalize_angle(self) -> Self {
         if !self.is_finite() {
             0f64
-        } else if self >= -180f64 && self <= 180f64 {
+        } else if (-180f64..=180f64).contains(&self) {
             self
         } else {
             let rots = (self / 360f64).abs().round();
