@@ -66,7 +66,7 @@ macro_rules! impl_vector_angles {
                             90.0
                         }
                     };
-                    Euler::new(pitch, 0.0, 0.0).normalized()
+                    Euler::new(pitch, 0.0, 0.0).normalize()
                 } else {
                     // magnitude_2d ?
                     let mut pitch = (-self.y).atan2(self.magnitude_xz()).to_degrees();
@@ -79,7 +79,7 @@ macro_rules! impl_vector_angles {
                         yaw += 360.0;
                     }
 
-                    Euler::new(pitch, yaw, 0.0).normalized()
+                    Euler::new(pitch, yaw, 0.0).normalize()
                 }
             }
 
@@ -96,9 +96,9 @@ macro_rules! impl_vector_angles {
                         self.z.atan2(self.x).to_degrees(),
                         left.y.atan2(up_y).to_degrees(),
                     )
-                    .normalized()
+                    .normalize()
                 } else {
-                    Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0.0).normalized()
+                    Euler::new(pitch, (-left.x).atan2(left.z).to_degrees(), 0.0).normalize()
                 }
             }
         }

@@ -21,3 +21,6 @@ pub mod prelude {
         pub use ::nalgebra;
     }
 }
+
+// external libraries
+pub use ::nalgebra;

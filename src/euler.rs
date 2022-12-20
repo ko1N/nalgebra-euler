@@ -51,15 +51,8 @@ impl<N: Scalar + RealField> IsFinite for Euler<N> {
 macro_rules! impl_euler {
     ($typ:tt) => {
         impl Euler<$typ> {
-            // Normalizes this angle
-            pub fn normalize(&mut self) {
-                self.p = self.p.normalize_angle();
-                self.y = self.y.normalize_angle();
-                self.r = self.r.normalize_angle();
-            }
-
             // Creates a normalized copy of this angle
-            pub fn normalized(&self) -> Self {
+            pub fn normalize(&self) -> Self {
                 Euler::new(
                     self.p.normalize_angle(),
                     self.y.normalize_angle(),
@@ -81,7 +74,7 @@ macro_rules! impl_euler {
                     *other
                 } else {
                     let t = v1 + delta;
-                    let out = t.euler_angles().normalized();
+                    let out = t.euler_angles().normalize();
                     if !out.is_finite() {
                         *other
                     } else {
