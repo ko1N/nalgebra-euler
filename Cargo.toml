@@ -5,7 +5,7 @@ authors = ["ko1N <ko1N1337@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-nalgebra = "0.31"
+nalgebra = "0.32"
 alga = "0.9"
 
 [dev-dependencies]
