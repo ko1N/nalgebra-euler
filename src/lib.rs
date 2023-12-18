@@ -19,8 +19,10 @@ pub mod prelude {
 
         // external libraries
         pub use ::nalgebra;
+        pub use ::nalgebra::*;
     }
 }
 
 // external libraries
 pub use ::nalgebra;
+pub use ::nalgebra::*;
