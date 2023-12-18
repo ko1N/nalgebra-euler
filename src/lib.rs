@@ -18,11 +18,11 @@ pub mod prelude {
         pub use crate::IsFinite;
 
         // external libraries
-        pub use ::nalgebra;
-        pub use ::nalgebra::*;
+        pub use nalgebra;
+        pub use nalgebra::*;
     }
 }
 
 // external libraries
-pub use ::nalgebra;
-pub use ::nalgebra::*;
+pub use nalgebra;
+pub use nalgebra::*;
